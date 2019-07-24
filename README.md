@@ -7,10 +7,13 @@
 ``` bash
 
 # npm need some dependency reinstall
-npm install --global --production windows-build-tools 
+npm install --global --production windows-build-tools (Windows)
 npm install -g electron-prebuilt  
 
 # pyrhon version need to be set over version 2.7
+# node versoin need not to be 12, 10.16.0 should be ok.
+sudo npm cache clean -f
+sudo n 10.16.0
 
 # install dependencies
 npm install
