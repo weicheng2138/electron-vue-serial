@@ -2,51 +2,36 @@
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue" />
     <main>
-      <div class="left-side">
-        <span class="title">Welcome to your new project!</span>
-        <system-information></system-information>
-      </div>
+      <b-container>
+        <b-row class="content">
+          <b-col class="left-side" cols="3">
+            <div class="doc">
+              <div class="title">Serial Settings</div>
+              <p>
+                select targeted device serial com for the RFID weight machine
+              </p>
+            </div>
+            <div class="doc">
+              <!-- <b-form-select v-model="selectedPort" :options="serialPorts"></b-form-select> -->
+              <b-dropdown v-model="dropdownName" variant="primary" class="m-2" split>
+                <span slot="text">{{ dropdownName }}</span>
+                <b-dropdown-item
+                  v-for="option in serialPorts"
+                  :key="option.comName"
+                  :value="option.comName"
+                  @click="selectedPort = option.comName; dropdownName = option.comName"
+                >{{ option.comName }}</b-dropdown-item>
+              </b-dropdown>
+            </div>
+          </b-col>
+          <b-col class="right-side" cols="9">
+            <span class="title">Welcome to your new project!</span>
+            <system-information></system-information>
+          </b-col>
+        </b-row>
 
-      <div class="right-side">
-        <div class="doc">
-          <div class="title">Getting Started</div>
-          <p>
-            electron-vue comes packed with detailed documentation that covers everything from
-            internal configurations, using the project structure, building your application,
-            and so much more.
-          </p>
-          <button
-            @click="open('https://simulatedgreg.gitbooks.io/electron-vue/content/')"
-          >Read the Docs</button>
-          <br />
-          <br />
-        </div>
-        <div class="doc">
-          <div class="title alt">Other Documentation</div>
-          <button class="alt" @click="open('https://electron.atom.io/docs/')">Electron</button>
-          <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
-          <button class="alt" @click="search()">Search</button>
-          <button class="alt" @click="test()">Write</button>
-
-          <div>
-            <!-- <b-form-select v-model="selectedPort" :options="serialPorts"></b-form-select> -->
-            <b-dropdown
-              v-model="dropdownName"
-              variant="primary"
-              class="m-2"
-              split
-            >
-              <span slot="text">{{ dropdownName }}</span>
-              <b-dropdown-item 
-                v-for="option in serialPorts" 
-                :key="option.comName" 
-                :value="option.comName"
-                @click="selectedPort = option.comName; dropdownName = option.comName"
-              >{{ option.comName }}</b-dropdown-item>
-            </b-dropdown>
-          </div>
-        </div>
-      </div>
+        <b-row class="bottom"></b-row>
+      </b-container>
     </main>
   </div>
 </template>
@@ -60,19 +45,17 @@ export default {
   components: { SystemInformation },
   data() {
     return {
-      dropdownName: 'Serial Com',
+      dropdownName: "Serial Com",
       serialPorts: [],
-      selectedPort: '',
-      options : [
-        {comName: 'com1'},
-        {comName: 'com2'},
-        {comName: 'com3'}
-      ]
+      selectedPort: "",
+      options: [{ comName: "com1" }, { comName: "com2" }, { comName: "com3" }]
     };
   },
-  created () {
+  created() {
     // console.log(this.serialPorts);
-    SerialPort.list().then(ports => {this.serialPorts = ports});
+    SerialPort.list().then(ports => {
+      this.serialPorts = ports;
+    });
   },
   methods: {
     open(link) {
@@ -120,16 +103,16 @@ body {
 
 main {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
-main > div {
+/* main > div {
   flex-basis: 50%;
-}
+} */
 
 .left-side {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
 }
 
 .welcome {
@@ -155,7 +138,7 @@ main > div {
   margin-bottom: 10px;
 }
 
-.doc button {
+/* .doc button {
   font-size: 0.8em;
   cursor: pointer;
   outline: none;
@@ -167,7 +150,7 @@ main > div {
   transition: all 0.15s ease;
   box-sizing: border-box;
   border: 1px solid #4fc08d;
-}
+} */
 
 .doc button.alt {
   color: #42b983;
