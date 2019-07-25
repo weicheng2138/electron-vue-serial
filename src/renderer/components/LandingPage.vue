@@ -26,20 +26,37 @@
           <button class="alt" @click="open('https://electron.atom.io/docs/')">Electron</button>
           <button class="alt" @click="open('https://vuejs.org/v2/guide/')">Vue.js</button>
           <button class="alt" @click="search()">Search</button>
-          <button class="alt" @click="write()">Write</button>
+          <button class="alt" @click="test()">Write</button>
 
           <div>
             <b-dropdown
-              id="dropdown-dropright"
-              dropright
-              text="Drop-Right"
+              text="Serial com"
               variant="primary"
               class="m-2"
             >
-              <b-dropdown-item href="#">Action</b-dropdown-item>
-              <b-dropdown-item href="#">Another action</b-dropdown-item>
-              <b-dropdown-item href="#">Something else here</b-dropdown-item>
+              <!-- <b-dropdown-item 
+                v-for="option in serialPorts" 
+                :key="option.comName" 
+                :value="option.comName"
+                @click="selectedPort = option.comName"
+              >{{ option.comName }}</b-dropdown-item> -->
+              <!-- <b-dropdown-item 
+                v-for="option in serialPorts" 
+                :key="option.comName" 
+                :value="option.comName"
+                @click="selectedPort = option.comName"
+              >{{ option.comName }}</b-dropdown-item> -->
             </b-dropdown>
+
+            <b-dropdown id="dropdown-1" text="Dropdown Button" class="m-md-2">
+              <b-dropdown-item>First Action</b-dropdown-item>
+              <b-dropdown-item>Second Action</b-dropdown-item>
+              <b-dropdown-item>Third Action</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item active>Active action</b-dropdown-item>
+              <b-dropdown-item disabled>Disabled action</b-dropdown-item>
+            </b-dropdown>
+
           </div>
         </div>
       </div>
@@ -56,7 +73,13 @@ export default {
   components: { SystemInformation },
   data() {
     return {
-      serialPorts: 'sss'
+      serialPorts: [],
+      selectedPort: '',
+      options : [
+        {comName: 'com1'},
+        {comName: 'com2'},
+        {comName: 'com3'}
+      ]
     };
   },
   created () {
@@ -70,8 +93,8 @@ export default {
     search() {
       console.log(this.serialPorts);
     },
-    write() {
-      port.write(new Buffer("Hi KECK!"));
+    test() {
+      console.log(this.selectedPort);
     }
   }
 };
