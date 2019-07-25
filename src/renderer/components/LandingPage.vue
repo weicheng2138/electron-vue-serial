@@ -29,16 +29,19 @@
           <button class="alt" @click="test()">Write</button>
 
           <div>
+            <!-- <b-form-select v-model="selectedPort" :options="serialPorts"></b-form-select> -->
             <b-dropdown
-              text="Serial com"
+              v-model="dropdownName"
               variant="primary"
               class="m-2"
+              split
             >
+              <span slot="text">{{ dropdownName }}</span>
               <b-dropdown-item 
                 v-for="option in serialPorts" 
                 :key="option.comName" 
                 :value="option.comName"
-                @click="selectedPort = option.comName"
+                @click="selectedPort = option.comName; dropdownName = option.comName"
               >{{ option.comName }}</b-dropdown-item>
             </b-dropdown>
           </div>
@@ -57,6 +60,7 @@ export default {
   components: { SystemInformation },
   data() {
     return {
+      dropdownName: 'Serial Com',
       serialPorts: [],
       selectedPort: '',
       options : [
