@@ -4,16 +4,14 @@
     <main>
       <b-container>
         <b-row class="content">
-          <b-col class="left-side" cols="3">
+          <b-col class="left-side" cols="6">
             <div class="doc">
               <div class="title">Serial Settings</div>
-              <p>
-                select targeted device serial com for the RFID weight machine
-              </p>
+              <p>select targeted device serial com for the RFID weight machine</p>
             </div>
             <div class="doc">
               <!-- <b-form-select v-model="selectedPort" :options="serialPorts"></b-form-select> -->
-              <b-dropdown v-model="dropdownName" variant="primary" class="m-2" split>
+              <b-dropdown v-model="dropdownName" variant="primary" split>
                 <span slot="text">{{ dropdownName }}</span>
                 <b-dropdown-item
                   v-for="option in serialPorts"
@@ -22,12 +20,14 @@
                   @click="selectedPort = option.comName; dropdownName = option.comName"
                 >{{ option.comName }}</b-dropdown-item>
               </b-dropdown>
+              <b-button :pressed.sync="myToggle" variant="primary" @click="open()">Open Port</b-button>
+              <b-button @click="close()">Close Port</b-button>
             </div>
           </b-col>
-          <b-col class="right-side" cols="9">
+          <!-- <b-col class="right-side" cols="6">
             <span class="title">Welcome to your new project!</span>
             <system-information></system-information>
-          </b-col>
+          </b-col>-->
         </b-row>
 
         <b-row class="bottom"></b-row>
@@ -39,6 +39,7 @@
 <script>
 import SystemInformation from "./LandingPage/SystemInformation";
 import SerialPort from "serialport";
+import Readline from '@serialport/parser-readline';
 
 export default {
   name: "landing-page",
@@ -48,6 +49,8 @@ export default {
       dropdownName: "Serial Com",
       serialPorts: [],
       selectedPort: "",
+      port: Object,
+      myToggle: true,
       options: [{ comName: "com1" }, { comName: "com2" }, { comName: "com3" }]
     };
   },
@@ -58,8 +61,23 @@ export default {
     });
   },
   methods: {
-    open(link) {
-      this.$electron.shell.openExternal(link);
+    open() {
+      this.port = new SerialPort(this.selectedPort, {
+        baudRate: 9600,
+        parser: new SerialPort.parsers.Readline("\n")
+      });
+
+      const parser = new Readline();
+      this.port.pipe(parser);
+
+      parser.on("data", line => console.log(`> ${line}`));
+
+      this.port.on('close', () => {
+        console.log(this.selectedPort + "is closed...");
+      })
+    },
+    close() {
+      this.port.close();
     },
     search() {
       console.log(this.serialPorts);
