@@ -4,7 +4,7 @@
     <main>
       <b-container>
         <b-row class="content">
-          <b-col class="left-side" cols="12">
+          <b-col class="left-side" cols="7">
             <div class="doc">
               <div class="title">Serial Settings</div>
               <p>select targeted device serial com for the RFID weight machine</p>
@@ -27,16 +27,18 @@
                 @click="open()"
               >Open Port</b-button>
               <b-button class="m-3" :disabled="!toggleOpen" @click="close()">Close Port</b-button>
-              <b-form-input v-model="input" :disabled="!toggleOpen" placeholder="Enter your command"></b-form-input>
+              <b-form-input class="m-3" v-model="input" :disabled="!toggleOpen" placeholder="Enter your command"></b-form-input>
               <b-button class="m-3" :disabled="!toggleOpen" @click="send()">Send</b-button>
 
               <p class="mt-3 mb-0">{{ this.tempStorage }}</p>
             </div>
           </b-col>
-          <!-- <b-col class="right-side" cols="6">
-            <span class="title">Welcome to your new project!</span>
-            <system-information></system-information>
-          </b-col>-->
+          <b-col class="right-side" cols="4">
+            <!-- <system-information></system-information> -->
+            <command-page v-bind:port='port'></command-page>
+
+
+          </b-col>
         </b-row>
 
         <b-row class="bottom"></b-row>
@@ -46,19 +48,21 @@
 </template>
 
 <script>
-import SystemInformation from "./LandingPage/SystemInformation";
+// import SystemInformation from "./LandingPage/SystemInformation";
+import CommandPage from "./LandingPage/CommandPage";
 import SerialPort from "serialport";
 import Readline from "@serialport/parser-readline";
 
 export default {
   name: "landing-page",
-  components: { SystemInformation },
+  // components: { SystemInformation },
+  components: { CommandPage },
   data() {
     return {
       dropdownName: "Serial Com",
       serialPorts: [],
       selectedPort: "",
-      port: Object,
+      port: {},
       toggleOpen: false,
       consoleReturn: "",
       tempStorage: "",
@@ -66,7 +70,6 @@ export default {
     };
   },
   created() {
-    // console.log(this.serialPorts);
     SerialPort.list().then(ports => {
       this.serialPorts = ports;
     });
