@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body>
+  <b-card no-body v-if="toggleOpen">
     <b-tabs content-class="mt-3" card>
       <b-tab title="WiFi Setting">
         <b-row>
@@ -36,7 +36,7 @@
           <b-button @click="getQRcode()">Read QR code</b-button>
 
           <b-card>
-            <b-form-input v-model="scaleWeight" placeholder="Enter Weight Scale"></b-form-input>
+            <b-form-input v-model="scaleWeight" placeholder="Enter Scale"></b-form-input>
             <b-button @click="correctScale()">Do the Correct Scale</b-button>
           </b-card>
         </b-col>
@@ -80,138 +80,139 @@ export default {
         ";port:" +
         this.tcpServerPort;
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     findDeviceID() {
       //TODO multiple devices choosing
       console.log("AT+0000-FindDeviceID");
       let command = "AT+0000-FindDeviceID";
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     setDeviceID() {
       let command = "AT+" + this.inputID + "-DeviceID:" + this.newID;
       this.inputID = this.newID;
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     resetWiFi() {
       let command = "AT+" + this.inputID + "-WiFiFactoryReset";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     reset() {
       let command = "AT+" + this.inputID + "-Reset";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     readVer() {
       let command = "AT+" + this.inputID + "-ReadVer";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     restartWiFi() {
       let command = "AT+" + this.inputID + "-WIFIRST";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     enterBootloader() {
       //TODO upgrade software of device
       let command = "AT+" + this.inputID + "-EnterBootloader";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     getWeight() {
       let command = "AT+" + this.inputID + "-GetWeight";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     getQRcode() {
       let command = "AT+" + this.inputID + "-GetQRcode";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     getRFTAG() {
       let command = "AT+" + this.inputID + "-GetRFTAG";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     setScaleZero() {
       let command = "AT+" + this.inputID + "-SetScaleZero";
       console.log(command);
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+      this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     },
     correctScale() {
       if (this.scaleWeight !== "") {
         let command = "AT+" + this.inputID + "-CorrectScale:" + this.scaleWeight +"g";
         console.log(command);
-      }
 
-      // this.port.write(command, err => {
-      //   if (err) {
-      //     return console.log("Error on write: ", err.message);
-      //   }
-      //   console.log("message written");
-      // });
+        this.port.write(command, err => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
+      }
+      
     }
   }
 };

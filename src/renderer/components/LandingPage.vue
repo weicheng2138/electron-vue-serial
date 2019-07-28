@@ -92,7 +92,7 @@ export default {
         parser.on("data", line => {
           console.log(`> ${line}`);
           this.consoleReturn = line;
-          this.tempStorage += "\n" + line;
+          this.tempStorage += "   " + line;
         });
 
         this.port.on("close", () => {
