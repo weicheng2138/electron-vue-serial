@@ -4,14 +4,14 @@
     <main>
       <b-container>
         <b-row class="content">
-          <b-col class="left-side" cols="6">
+          <b-col class="left-side" cols="12">
             <div class="doc">
               <div class="title">Serial Settings</div>
               <p>select targeted device serial com for the RFID weight machine</p>
             </div>
             <div class="doc">
               <!-- <b-form-select v-model="selectedPort" :options="serialPorts"></b-form-select> -->
-              <b-dropdown v-model="dropdownName" variant="primary" split>
+              <b-dropdown class="m-3" v-model="dropdownName" variant="primary" split>
                 <span slot="text">{{ dropdownName }}</span>
                 <b-dropdown-item
                   v-for="option in serialPorts"
@@ -20,8 +20,10 @@
                   @click="selectedPort = option.comName; dropdownName = option.comName"
                 >{{ option.comName }}</b-dropdown-item>
               </b-dropdown>
-              <b-button :pressed.sync="myToggle" variant="primary" @click="open()">Open Port</b-button>
-              <b-button @click="close()">Close Port</b-button>
+              <b-button variant="primary" class="m-3" :disabled='toggleOpen' @click="open()">Open Port</b-button>
+              <b-button class="m-3" :disabled='!toggleOpen' @click="close()">Close Port</b-button>
+
+              <p class="m-3">{{ this.consoleReturn }}</p>
             </div>
           </b-col>
           <!-- <b-col class="right-side" cols="6">
@@ -50,8 +52,8 @@ export default {
       serialPorts: [],
       selectedPort: "",
       port: Object,
-      myToggle: true,
-      options: [{ comName: "com1" }, { comName: "com2" }, { comName: "com3" }]
+      toggleOpen: false,
+      consoleReturn: ""
     };
   },
   created() {
@@ -70,10 +72,19 @@ export default {
       const parser = new Readline();
       this.port.pipe(parser);
 
-      parser.on("data", line => console.log(`> ${line}`));
+      parser.on("data", line => {
+        console.log(`> ${line}`);
+        this.consoleReturn = line;
+      });
 
       this.port.on('close', () => {
-        console.log(this.selectedPort + "is closed...");
+        console.log(this.selectedPort + " is closed...");
+        this.toggleOpen = !this.toggleOpen;
+        this.consoleReturn = "Port closed...";
+      });
+
+      this.port.on('open', () => {
+        this.toggleOpen = !this.toggleOpen;
       })
     },
     close() {
