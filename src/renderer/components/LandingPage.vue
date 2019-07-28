@@ -20,10 +20,17 @@
                   @click="selectedPort = option.comName; dropdownName = option.comName"
                 >{{ option.comName }}</b-dropdown-item>
               </b-dropdown>
-              <b-button variant="primary" class="m-3" :disabled='toggleOpen' @click="open()">Open Port</b-button>
-              <b-button class="m-3" :disabled='!toggleOpen' @click="close()">Close Port</b-button>
+              <b-button
+                variant="primary"
+                class="m-3"
+                :disabled="toggleOpen"
+                @click="open()"
+              >Open Port</b-button>
+              <b-button class="m-3" :disabled="!toggleOpen" @click="close()">Close Port</b-button>
+              <b-form-input v-model="input" :disabled="!toggleOpen" placeholder="Enter your command"></b-form-input>
+              <b-button class="m-3" :disabled="!toggleOpen" @click="send()">Send</b-button>
 
-              <p class="m-3">{{ this.consoleReturn }}</p>
+              <p class="mt-3 mb-0">{{ this.tempStorage }}</p>
             </div>
           </b-col>
           <!-- <b-col class="right-side" cols="6">
@@ -41,7 +48,7 @@
 <script>
 import SystemInformation from "./LandingPage/SystemInformation";
 import SerialPort from "serialport";
-import Readline from '@serialport/parser-readline';
+import Readline from "@serialport/parser-readline";
 
 export default {
   name: "landing-page",
@@ -53,7 +60,9 @@ export default {
       selectedPort: "",
       port: Object,
       toggleOpen: false,
-      consoleReturn: ""
+      consoleReturn: "",
+      tempStorage: "",
+      input: ""
     };
   },
   created() {
@@ -75,17 +84,20 @@ export default {
       parser.on("data", line => {
         console.log(`> ${line}`);
         this.consoleReturn = line;
+        this.tempStorage += "\n" + line;
       });
 
-      this.port.on('close', () => {
+      this.port.on("close", () => {
         console.log(this.selectedPort + " is closed...");
         this.toggleOpen = !this.toggleOpen;
         this.consoleReturn = "Port closed...";
+        this.tempStorage = "";
+        this.input = "";
       });
 
-      this.port.on('open', () => {
+      this.port.on("open", () => {
         this.toggleOpen = !this.toggleOpen;
-      })
+      });
     },
     close() {
       this.port.close();
@@ -93,8 +105,13 @@ export default {
     search() {
       console.log(this.serialPorts);
     },
-    test() {
-      console.log(this.selectedPort);
+    send() {
+      this.port.write(this.input, (err) => {
+        if (err) {
+          return console.log("Error on write: ", err.message);
+        }
+        console.log("message written");
+      });
     }
   }
 };
