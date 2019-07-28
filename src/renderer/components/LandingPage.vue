@@ -27,7 +27,12 @@
                 @click="open()"
               >Open Port</b-button>
               <b-button class="m-3" :disabled="!toggleOpen" @click="close()">Close Port</b-button>
-              <b-form-input class="m-3" v-model="input" :disabled="!toggleOpen" placeholder="Enter your command"></b-form-input>
+              <b-form-input
+                class="m-3"
+                v-model="input"
+                :disabled="!toggleOpen"
+                placeholder="Enter your command"
+              ></b-form-input>
               <b-button class="m-3" :disabled="!toggleOpen" @click="send()">Send</b-button>
 
               <p class="mt-3 mb-0">{{ this.tempStorage }}</p>
@@ -35,9 +40,7 @@
           </b-col>
           <b-col class="right-side" cols="4">
             <!-- <system-information></system-information> -->
-            <command-page v-bind:port='port'></command-page>
-
-
+            <command-page v-bind:port="port" :toggle-open="toggleOpen"></command-page>
           </b-col>
         </b-row>
 
@@ -76,31 +79,37 @@ export default {
   },
   methods: {
     open() {
-      this.port = new SerialPort(this.selectedPort, {
-        baudRate: 9600,
-        parser: new SerialPort.parsers.Readline("\n")
-      });
-
-      const parser = new Readline();
-      this.port.pipe(parser);
-
-      parser.on("data", line => {
-        console.log(`> ${line}`);
-        this.consoleReturn = line;
-        this.tempStorage += "\n" + line;
-      });
-
-      this.port.on("close", () => {
-        console.log(this.selectedPort + " is closed...");
-        this.toggleOpen = !this.toggleOpen;
-        this.consoleReturn = "Port closed...";
+      if (this.selectedPort !== "") {
         this.tempStorage = "";
-        this.input = "";
-      });
+        this.port = new SerialPort(this.selectedPort, {
+          baudRate: 9600,
+          parser: new SerialPort.parsers.Readline("\n")
+        });
 
-      this.port.on("open", () => {
-        this.toggleOpen = !this.toggleOpen;
-      });
+        const parser = new Readline();
+        this.port.pipe(parser);
+
+        parser.on("data", line => {
+          console.log(`> ${line}`);
+          this.consoleReturn = line;
+          this.tempStorage += "\n" + line;
+        });
+
+        this.port.on("close", () => {
+          console.log(this.selectedPort + " is closed...");
+          this.toggleOpen = !this.toggleOpen;
+          this.consoleReturn = "Port closed...";
+          this.tempStorage = "";
+          this.input = "";
+        });
+
+        this.port.on("open", () => {
+          this.toggleOpen = !this.toggleOpen;
+          
+        });
+      }else {
+        this.tempStorage = "Please select the com first..."
+      }
     },
     close() {
       this.port.close();
@@ -109,7 +118,7 @@ export default {
       console.log(this.serialPorts);
     },
     send() {
-      this.port.write(this.input, (err) => {
+      this.port.write(this.input, err => {
         if (err) {
           return console.log("Error on write: ", err.message);
         }
