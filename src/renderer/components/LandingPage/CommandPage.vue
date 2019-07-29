@@ -1,7 +1,8 @@
 <template>
-  <b-card no-body v-if="toggleOpen">
+  <!-- <b-card no-body v-if="toggleOpen"> -->
+  <b-card no-body>
     <b-tabs content-class="mt-3" card>
-      <b-tab title="WiFi Setting">
+      <b-tab title="WiFi Setting" active>
         <b-row>
           <b-form-input class="m-3" v-model="wifiSSID" placeholder="Enter your WiFi SSID"></b-form-input>
           <b-form-input class="m-3" v-model="password" placeholder="Enter your WiFi password"></b-form-input>
@@ -16,8 +17,30 @@
         </b-row>
         <b-button @click="submitSetting()">Submit Setting</b-button>
       </b-tab>
-      <b-tab title="AT Command" active>
-        <b-col>
+      <b-tab title="AT Command" style="position:relative; height:358px; overflow-y:scroll;">
+        <b-list-group class="m-3">
+          <b-list-group-item button @click="findDeviceID()">Find Device ID</b-list-group-item>
+        </b-list-group>
+        <b-card class="m-3">
+          <b-form-input v-model="inputID" placeholder="Your Device ID"></b-form-input>
+          <b-form-input v-model="newID" placeholder="Device New ID"></b-form-input>
+          <b-button style="justify-content: center" @click="setDeviceID()">Set Device ID</b-button>
+        </b-card>
+        <b-list-group class="m-3">
+          <b-list-group-item button @click="resetWiFi()">Reset WiFi</b-list-group-item>
+          <b-list-group-item button @click="reset()">Reset device</b-list-group-item>
+          <b-list-group-item button @click="readVer()">Read Device software version</b-list-group-item>
+          <b-list-group-item button @click="restartWiFi()">Restart WiFi</b-list-group-item>
+          <b-list-group-item button @click="enterBootloader()">Upgrade Software of Device</b-list-group-item>
+          <b-list-group-item button @click="getWeight()">Read Current Weight</b-list-group-item>
+          <b-list-group-item button @click="getRFTAG()">Read RFID Tag</b-list-group-item>
+          <b-list-group-item button @click="getQRcode()">Read QR code</b-list-group-item>
+        </b-list-group>
+        <b-card class="m-3">
+          <b-form-input v-model="scaleWeight" placeholder="Enter Scale"></b-form-input>
+          <b-button @click="correctScale()">Do the Correct Scale</b-button>
+        </b-card>
+        <!-- <b-col>
           <b-button @click="findDeviceID()">Find Device ID</b-button>
 
           <b-card>
@@ -39,7 +62,7 @@
             <b-form-input v-model="scaleWeight" placeholder="Enter Scale"></b-form-input>
             <b-button @click="correctScale()">Do the Correct Scale</b-button>
           </b-card>
-        </b-col>
+        </b-col>-->
       </b-tab>
     </b-tabs>
   </b-card>
@@ -202,18 +225,25 @@ export default {
     },
     correctScale() {
       if (this.scaleWeight !== "") {
-        let command = "AT+" + this.inputID + "-CorrectScale:" + this.scaleWeight +"g";
+        let command =
+          "AT+" + this.inputID + "-CorrectScale:" + this.scaleWeight + "g";
         console.log(command);
 
         this.port.write(command, err => {
-        if (err) {
-          return console.log("Error on write: ", err.message);
-        }
-        console.log("message written");
-      });
+          if (err) {
+            return console.log("Error on write: ", err.message);
+          }
+          console.log("message written");
+        });
       }
-      
     }
   }
 };
 </script>
+
+<style>
+button-alt {
+  justify-content: center;
+}
+</style>
+

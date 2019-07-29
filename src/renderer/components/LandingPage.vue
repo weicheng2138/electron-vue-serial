@@ -105,7 +105,7 @@ export default {
 
         this.port.on("open", () => {
           this.toggleOpen = !this.toggleOpen;
-          
+
         });
       }else {
         this.tempStorage = "Please select the com first..."
