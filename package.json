@@ -1,5 +1,5 @@
 {
-  "name": "weather-app",
+  "name": "rfid-weight-machine-app",
   "version": "0.0.1",
   "author": "Keck Hung",
   "description": "An electron-vue project",
@@ -18,7 +18,7 @@
     "rebuild": "electron-rebuild"
   },
   "build": {
-    "productName": "weather-app",
+    "productName": "rfid-weight-machine-app",
     "appId": "com.example.yourapp",
     "directories": {
       "output": "build"
