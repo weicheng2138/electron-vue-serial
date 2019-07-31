@@ -40,7 +40,7 @@
           </b-col>
           <b-col class="right-side" cols="4">
             <!-- <system-information></system-information> -->
-            <command-page v-bind:port="port" :toggle-open="toggleOpen"></command-page>
+            <command-page v-bind:port="port" :toggle-open="toggleOpen" :current-device="currentDevice"></command-page>
           </b-col>
         </b-row>
 
@@ -69,12 +69,14 @@ export default {
       toggleOpen: false,
       consoleReturn: "",
       tempStorage: "",
-      input: ""
+      input: "",
+      currentDevice: ""
     };
   },
   created() {
     SerialPort.list().then(ports => {
       this.serialPorts = ports;
+      // console.log(this.serialPorts);
     });
   },
   methods: {
@@ -103,9 +105,14 @@ export default {
           this.input = "";
         });
 
-        this.port.on("open", () => {
+        this.port.on("open", (data) => {
           this.toggleOpen = !this.toggleOpen;
-
+          //TODO modify to online version
+          this.currentDevice = "0008";
+          // if(this.currentDevice) {
+          //   this.currentDevice = data;
+          //   console.log("###############");
+          // }
         });
       }else {
         this.tempStorage = "Please select the com first..."

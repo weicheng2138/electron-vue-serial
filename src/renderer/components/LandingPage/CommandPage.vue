@@ -77,7 +77,7 @@ export default {
       password: "",
       tcpServerIP: "",
       tcpServerPort: "",
-      inputID: "",
+      inputID: this.currentDevice,
       newID: "",
       scaleWeight: ""
     };
@@ -88,6 +88,9 @@ export default {
     },
     toggleOpen: {
       type: Boolean
+    },
+    currentDevice: {
+      type: String
     }
   },
   methods: {
@@ -111,6 +114,7 @@ export default {
       });
     },
     findDeviceID() {
+      console.log(this.inputID);
       //TODO multiple devices choosing
       console.log("AT+0000-FindDeviceID");
       let command = "AT+0000-FindDeviceID";
