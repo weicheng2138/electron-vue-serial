@@ -95,23 +95,25 @@ export default {
   },
   methods: {
     submitSetting() {
-      console.log("submit your settings...");
-      let command =
-        "SET-0 ssid:" +
-        this.wifiSSID +
-        ";password:" +
-        this.password +
-        ";ip:" +
-        this.tcpServerIP +
-        ";port:" +
-        this.tcpServerPort;
-      console.log(command);
-      this.port.write(command, err => {
-        if (err) {
-          return console.log("Error on write: ", err.message);
-        }
-        console.log("message written");
-      });
+      // console.log("submit your settings...");
+      // let command =
+      //   "SET-0 ssid:" +
+      //   this.wifiSSID +
+      //   ";password:" +
+      //   this.password +
+      //   ";ip:" +
+      //   this.tcpServerIP +
+      //   ";port:" +
+      //   this.tcpServerPort;
+      // console.log(command);
+      // this.port.write(command, err => {
+      //   if (err) {
+      //     return console.log("Error on write: ", err.message);
+      //   }
+      //   console.log("message written");
+      // });
+      console.log(this.currentDevice);
+      console.log(this.inputID)
     },
     findDeviceID() {
       console.log(this.inputID);

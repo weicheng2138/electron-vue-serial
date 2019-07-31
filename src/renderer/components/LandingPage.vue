@@ -34,13 +34,18 @@
                 placeholder="Enter your command"
               ></b-form-input>
               <b-button class="m-3" :disabled="!toggleOpen" @click="send()">Send</b-button>
+              <b-button class="m-3" @click="test()">Test</b-button>
 
               <p class="mt-3 mb-0">{{ this.tempStorage }}</p>
             </div>
           </b-col>
           <b-col class="right-side" cols="4">
             <!-- <system-information></system-information> -->
-            <command-page v-bind:port="port" :toggle-open="toggleOpen" :current-device="currentDevice"></command-page>
+            <command-page
+              v-bind:port="port"
+              :toggle-open="toggleOpen"
+              :current-device="currentDevice"
+            ></command-page>
           </b-col>
         </b-row>
 
@@ -60,7 +65,7 @@ export default {
   name: "landing-page",
   // components: { SystemInformation },
   components: { CommandPage },
-  data() {
+  data: function () {
     return {
       dropdownName: "Serial Com",
       serialPorts: [],
@@ -78,6 +83,7 @@ export default {
       this.serialPorts = ports;
       // console.log(this.serialPorts);
     });
+    // this.currentDevice = "0008";
   },
   methods: {
     open() {
@@ -105,24 +111,25 @@ export default {
           this.input = "";
         });
 
-        this.port.on("open", (data) => {
-          this.toggleOpen = !this.toggleOpen;
-          //TODO modify to online version
-          this.currentDevice = "0008";
-          // if(this.currentDevice) {
-          //   this.currentDevice = data;
-          //   console.log("###############");
-          // }
+        this.port.on("open", data => {
+            this.toggleOpen = !this.toggleOpen;
+            //TODO modify to online version
+            this.currentDevice = "0006";
+            console.log(this.currentDevice);
+            // if(this.currentDevice) {
+            //   this.currentDevice = data;
+            //   console.log("###############");
+            // }
         });
-      }else {
-        this.tempStorage = "Please select the com first..."
+      } else {
+        this.tempStorage = "Please select the com first...";
       }
     },
     close() {
       this.port.close();
     },
-    search() {
-      console.log(this.serialPorts);
+    test() {
+      console.log(this.currentDevice);
     },
     send() {
       this.port.write(this.input, err => {
