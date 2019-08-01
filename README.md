@@ -1,4 +1,4 @@
-# weather-app
+# rfid-weight-machine-app
 
 > An electron-vue project
 
