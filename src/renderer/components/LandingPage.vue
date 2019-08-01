@@ -37,6 +37,13 @@
               <b-button class="m-3" @click="test()">Test</b-button>
 
               <p class="mt-3 mb-0">{{ this.tempStorage }}</p>
+              <b-alert
+                :show="dismissCountDown"
+                dismissible
+                variant="warning"
+                @dismissed="dismissCountDown=0"
+                @dismiss-count-down="countDownChanged"
+              >Please select the com first...</b-alert>
             </div>
           </b-col>
           <b-col class="right-side" cols="4">
@@ -65,7 +72,7 @@ export default {
   name: "landing-page",
   // components: { SystemInformation },
   components: { CommandPage },
-  data: function () {
+  data: function() {
     return {
       dropdownName: "Serial Com",
       serialPorts: [],
@@ -75,7 +82,9 @@ export default {
       consoleReturn: "",
       tempStorage: "",
       input: "",
-      currentDevice: ""
+      currentDevice: "",
+      dismissCountDown: 0,
+      dismissSecs: 3
     };
   },
   created() {
@@ -112,21 +121,27 @@ export default {
         });
 
         this.port.on("open", data => {
-            this.toggleOpen = !this.toggleOpen;
-            //TODO modify to online version
-            this.currentDevice = "0006";
-            console.log(this.currentDevice);
-            // if(this.currentDevice) {
-            //   this.currentDevice = data;
-            //   console.log("###############");
-            // }
+          this.toggleOpen = !this.toggleOpen;
+          //TODO modify to online version
+          this.currentDevice = "0006";
+          console.log(this.currentDevice);
+          // if(this.currentDevice) {
+          //   this.currentDevice = data;
+          //   console.log("###############");
+          // }
         });
       } else {
-        this.tempStorage = "Please select the com first...";
+        this.showAlert();
       }
     },
     close() {
       this.port.close();
+    },
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown;
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs;
     },
     test() {
       console.log(this.currentDevice);
